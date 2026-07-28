@@ -2,6 +2,7 @@ package com.room911.controller;
 
 import com.room911.dto.AccessAttemptDTO;
 import com.room911.service.interfaces.AccessAttemptService;
+import com.room911.service.interfaces.PdfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +53,19 @@ public class AccessAttemptController {
                         fin
                 )
         );
+    }
+
+    private final PdfService pdfService;
+
+    @GetMapping("/pdf/{empleadoId}")
+    public ResponseEntity<byte[]> descargarPdf(@PathVariable Long empleadoId) {
+
+        byte[] pdf = pdfService.generarHistorialEmpleado(empleadoId);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition",
+                        "attachment; filename=historial_" + empleadoId + ".pdf")
+                .header("Content-Type", "application/pdf")
+                .body(pdf);
     }
 }
