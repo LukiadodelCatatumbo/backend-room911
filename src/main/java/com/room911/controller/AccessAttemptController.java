@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,5 +28,29 @@ public class AccessAttemptController {
     @GetMapping("/{id}")
     public ResponseEntity<AccessAttemptDTO> findById(@PathVariable Long id){
         return ResponseEntity.ok(accessAttemptService.findById(id));
+    }
+
+    @GetMapping("/empleado/{empleadoId}")
+    public ResponseEntity<List<AccessAttemptDTO>> historialEmpleado(
+            @PathVariable Long empleadoId) {
+
+        return ResponseEntity.ok(
+                accessAttemptService.findByEmpleado(empleadoId)
+        );
+    }
+
+    @GetMapping("/empleado/{empleadoId}/fechas")
+    public ResponseEntity<List<AccessAttemptDTO>> historialPorFechas(
+            @PathVariable Long empleadoId,
+            @RequestParam LocalDateTime inicio,
+            @RequestParam LocalDateTime fin) {
+
+        return ResponseEntity.ok(
+                accessAttemptService.findByEmpleadoAndFecha(
+                        empleadoId,
+                        inicio,
+                        fin
+                )
+        );
     }
 }

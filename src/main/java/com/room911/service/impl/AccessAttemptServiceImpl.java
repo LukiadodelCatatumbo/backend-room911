@@ -48,4 +48,31 @@ public class AccessAttemptServiceImpl implements AccessAttemptService {
                 .map(AccessAttemptMapper::toDTO)
                 .orElse(null);
     }
+
+    @Override
+    public List<AccessAttemptDTO> findByEmpleado(Long empleadoId) {
+
+        return accessAttemptRepository.findByEmpleadoId(empleadoId)
+                .stream()
+                .map(AccessAttemptMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public List<AccessAttemptDTO> findByEmpleadoAndFecha(
+            Long empleadoId,
+            LocalDateTime inicio,
+            LocalDateTime fin) {
+
+        return accessAttemptRepository
+                .findByEmpleadoIdAndFechaAccesoBetween(
+                        empleadoId,
+                        inicio,
+                        fin
+                )
+                .stream()
+                .map(AccessAttemptMapper::toDTO)
+                .toList();
+    }
+
 }

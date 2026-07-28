@@ -46,6 +46,45 @@ public class AccessServiceImpl implements AccessService {
 
         Empleado empleado = empleadoOpt.get();
 
+        if (!empleado.getActivo()) {
+
+            AccessAttempt intento = AccessAttempt.builder()
+                    .fechaAcceso(LocalDateTime.now())
+                    .exito(false)
+                    .message("Empleado inactivo")
+                    .empleado(empleado)
+                    .build();
+
+            accessAttemptRepository.save(intento);
+
+            return AccessResponseDTO.builder()
+                    .permitido(false)
+                    .mensaje("Empleado inactivo")
+                    .nombreEmpleado(
+                            empleado.getNombre() + " " + empleado.getApellido())
+                    .build();
+        }
+
+        if (!empleado.getAccesoPermitido()) {
+
+            AccessAttempt intento = AccessAttempt.builder()
+                    .fechaAcceso(LocalDateTime.now())
+                    .exito(true)
+                    .message("Bienvenido al Room_911")
+                    .empleado(empleado)
+                    .build();
+
+            accessAttemptRepository.save(intento);
+
+            return AccessResponseDTO.builder()
+                    .permitido(true)
+                    .mensaje("Bienvenido al Room_911")
+                    .nombreEmpleado(
+                            empleado.getNombre() + " " + empleado.getApellido())
+                    .build();
+        }
+
+
         return AccessResponseDTO.builder()
                 .permitido(true)
                 .mensaje("Empleado encontrado")
