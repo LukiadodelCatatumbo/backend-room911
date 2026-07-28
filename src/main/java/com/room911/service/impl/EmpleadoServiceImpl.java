@@ -10,6 +10,10 @@ import com.room911.repository.EmpleadoRepository;
 import com.room911.service.interfaces.EmpleadoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,8 +54,11 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     public List<EmpleadoResponseDTO> listar() {
-        return empleadoRepository.findByActivoTrue()
-                .stream()
+        List<Empleado> empleados = empleadoRepository.findByActivoTrue();
+
+        System.out.println("Empleados activos encontrados: " + empleados.size());
+
+        return empleados.stream()
                 .map(EmpleadoMapper::toDTO)
                 .toList();
     }
@@ -113,4 +120,57 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         empleadoRepository.save(empleado);
     }
 
+    @Override
+    public void importarCSV(MultipartFile archivo, Long departamentoId){
+        Departamento departamento = departamentoRepository.findById(departamentoId)
+                .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(archivo.getInputStream()))){
+
+            String linea = reader.readLine();
+
+            int importados = 0;
+            int duplicados = 0;
+
+            while ((linea = reader.readLine()) != null){
+                String[] datos = linea.split("[,\t]");
+
+                System.out.println("Columnas detectadas: " + datos.length);
+                if (datos.length < 5){
+                    System.out.println("Fila ignorada");
+                    continue;
+                }
+
+                System.out.println("Documento: " + datos[2].trim());
+
+                if (empleadoRepository.existsByDocumento(datos[2].trim())){
+                    duplicados++;
+                    System.out.println("Documento duplicado");
+                    continue;
+                }
+
+                Empleado empleado = Empleado.builder()
+                        .nombre(datos[0].trim())
+                        .apellido(datos[1].trim())
+                        .documento(datos[2].trim())
+                        .correo(datos[3].trim())
+                        .cargo(datos[4].trim())
+                        .departamento(departamento)
+                        .activo(true)
+                        .fechaCreacion(LocalDateTime.now())
+                        .build();
+                empleadoRepository.save(empleado);
+                importados++;
+                System.out.println("Empleado guardado: " + empleado.getNombre());
+            }
+
+            System.out.println("Importacion de empleados finalizada");
+            System.out.println("Empleados importados : " + importados);
+            System.out.println("Empleados duplicados : " + duplicados);
+
+        } catch (IOException e){
+            throw new RuntimeException("Error al leer el archivo CSV");
+        }
+    }
 }

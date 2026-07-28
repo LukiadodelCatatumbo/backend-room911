@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -61,5 +62,18 @@ public class EmpleadoController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id){
         empleadoService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Importar empleados desde archivo CSV y los
+     * asigna a un departamento
+     */
+    @PostMapping("/importar/{departamentoId}")
+    public ResponseEntity<String> importarCSV(
+            @RequestParam("archivo") MultipartFile archivo,
+            @PathVariable Long departamentoId){
+        empleadoService.importarCSV(archivo, departamentoId);
+
+        return ResponseEntity.ok("Archivo importado correctamente");
     }
 }
