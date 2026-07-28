@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -40,6 +41,9 @@ public class Empleado {
     @Column(nullable = false, length = 100)
     private String cargo;
 
+    @OneToMany(mappedBy = "empleado")
+    private List<AccessAttempt> accessAttempts;
+
     /**
      * Aqui se relacionan muchos empleados que pertenecen a un departamento,
      * por lo que se utiliza ManyToOne
@@ -52,6 +56,10 @@ public class Empleado {
     @Builder.Default
     @Column(nullable = false)
     private Boolean activo = true;
+
+    @Builder.Default
+    @Column(name = "acceso_permitido", nullable = false)
+    private Boolean accesoPermitido = true;
 
     @Builder.Default
     @Column(nullable = false)

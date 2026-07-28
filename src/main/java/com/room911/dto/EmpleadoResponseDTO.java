@@ -27,6 +27,7 @@ public class EmpleadoResponseDTO {
     private Long departamentoId;
     private String nombreDepartamento;
     private Boolean activo;
+    private Boolean accesoPermitido;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
 }

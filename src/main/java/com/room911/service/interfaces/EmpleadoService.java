@@ -14,4 +14,8 @@ public interface EmpleadoService {
     EmpleadoResponseDTO actualizar(Long id, EmpleadoDTO dto);
     void eliminar(Long id);
     void importarCSV(MultipartFile archivo, Long departamento);
+
+    List<EmpleadoResponseDTO> buscarPorNombre(String nombre);
+    List<EmpleadoResponseDTO> buscarPorApellido(String apellido);
+    List<EmpleadoResponseDTO> buscarPorDepartamento(Long departamentoId);
 }

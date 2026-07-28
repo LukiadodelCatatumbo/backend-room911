@@ -46,6 +46,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 .cargo(dto.getCargo())
                 .departamento(departamento)
                 .activo(true)
+                .accesoPermitido(dto.getAccesoPermitido() != null ? dto.getAccesoPermitido() : true)
                 .fechaCreacion(LocalDateTime.now())
                 .build();
         Empleado guardado = empleadoRepository.save(empleado);
@@ -98,6 +99,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         empleado.setCorreo(dto.getCorreo());
         empleado.setCargo(dto.getCargo());
         empleado.setDepartamento(departamento);
+        if (dto.getAccesoPermitido() != null){
+            empleado.setAccesoPermitido(dto.getAccesoPermitido());
+        }
         empleado.setFechaActualizacion(LocalDateTime.now());
 
         Empleado actualizado = empleadoRepository.save(empleado);
@@ -158,6 +162,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                         .cargo(datos[4].trim())
                         .departamento(departamento)
                         .activo(true)
+                        .accesoPermitido(true)
                         .fechaCreacion(LocalDateTime.now())
                         .build();
                 empleadoRepository.save(empleado);
@@ -172,5 +177,32 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         } catch (IOException e){
             throw new RuntimeException("Error al leer el archivo CSV");
         }
+    }
+
+    @Override
+    public List<EmpleadoResponseDTO> buscarPorNombre(String nombre){
+        return empleadoRepository
+                .findByNombreContainingIgnoreCaseAndActivoTrue(nombre)
+                .stream()
+                .map(EmpleadoMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public List<EmpleadoResponseDTO> buscarPorApellido(String apellido){
+        return empleadoRepository
+                .findByApellidoContainingIgnoreCaseAndActivoTrue(apellido)
+                .stream()
+                .map(EmpleadoMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public List<EmpleadoResponseDTO> buscarPorDepartamento(Long departamentoId){
+        return empleadoRepository
+                .findByDepartamentoIdAndActivoTrue(departamentoId)
+                .stream()
+                .map(EmpleadoMapper::toDTO)
+                .toList();
     }
 }

@@ -48,6 +48,33 @@ public class EmpleadoController {
         return ResponseEntity.ok(empleadoService.buscarPorId(id));
     }
 
+    /**
+     * Buscar empleado por su nombre
+     */
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<List<EmpleadoResponseDTO>> buscarPorNombre(
+            @PathVariable String nombre){
+        return ResponseEntity.ok(empleadoService.buscarPorNombre(nombre));
+    }
+
+    /**
+     * Buscar empleado por su apellido
+     */
+    @GetMapping("/apellido/{apellido}")
+    public ResponseEntity<List<EmpleadoResponseDTO>> buscarPorApellido(
+            @PathVariable String apellido){
+        return ResponseEntity.ok(empleadoService.buscarPorApellido(apellido));
+    }
+
+    /**
+     * Buscar empleados por departamento
+     */
+    @GetMapping("/departamento/{departamentoId}")
+    public ResponseEntity<List<EmpleadoResponseDTO>> buscarPorDepartamento(
+            @PathVariable Long departamentoId){
+        return ResponseEntity.ok(empleadoService.buscarPorDepartamento(departamentoId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<EmpleadoResponseDTO> actualiza(
             @PathVariable Long id,

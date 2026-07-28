@@ -26,6 +26,7 @@ public class EmpleadoMapper {
                 .departamentoId(empleado.getDepartamento().getId())
                 .nombreDepartamento(empleado.getDepartamento().getNombre())
                 .activo(empleado.getActivo())
+                .accesoPermitido(empleado.getAccesoPermitido())
                 .fechaCreacion(empleado.getFechaCreacion())
                 .fechaActualizacion(empleado.getFechaActualizacion())
                 .build();

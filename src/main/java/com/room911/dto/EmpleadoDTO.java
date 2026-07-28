@@ -36,4 +36,6 @@ public class EmpleadoDTO {
      */
     @NotNull(message = "El departamento es obligatoio")
     private Long departamentoId;
+
+    private Boolean accesoPermitido;
 }
