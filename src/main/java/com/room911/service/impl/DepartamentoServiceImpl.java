@@ -1,16 +1,18 @@
 package com.room911.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.room911.dto.DepartamentoDTO;
 import com.room911.dto.DepartamentoResponseDTO;
 import com.room911.entity.Departamento;
 import com.room911.mapper.DepartamentoMapper;
 import com.room911.repository.DepartamentoRepository;
 import com.room911.service.interfaces.DepartamentoService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -92,5 +94,19 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         departamentoRepository.save(departamento);
 
     }
+
+    @Override
+public void activar(Long id) {
+
+    Departamento departamento = departamentoRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Departamento no encontrado"));
+
+    departamento.setActivo(true);
+    departamento.setFechaActualizacion(LocalDateTime.now());
+
+    departamentoRepository.save(departamento);
+
+}
 
 }

@@ -15,4 +15,8 @@ public class AccessAttemptDTO {
     private Boolean exito;
     private String message;
     private Long empleadoId;
+    private String nombreEmpleado;
+    private String documento;
+    private String cargo;
+    private String departamento;
 }

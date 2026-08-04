@@ -43,6 +43,9 @@ public class Empleado {
 
     @OneToMany(mappedBy = "empleado")
     private List<AccessAttempt> accessAttempts;
+    
+    @OneToMany(mappedBy = "empleado")
+    private List<HistorialAcceso> historialAccesos;
 
     /**
      * Aqui se relacionan muchos empleados que pertenecen a un departamento,

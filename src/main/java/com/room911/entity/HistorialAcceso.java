@@ -17,7 +17,10 @@ public class HistorialAcceso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column (nullable = false)
     private LocalDateTime fechaIngreso;
+
+    @Column (name = "fecha_salida")
     private LocalDateTime fechaSalida;
 
     @ManyToOne

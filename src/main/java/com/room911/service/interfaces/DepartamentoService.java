@@ -1,9 +1,9 @@
 package com.room911.service.interfaces;
 
+import java.util.List;
+
 import com.room911.dto.DepartamentoDTO;
 import com.room911.dto.DepartamentoResponseDTO;
-
-import java.util.List;
 
 public interface DepartamentoService {
     DepartamentoResponseDTO guardar(DepartamentoDTO dto);
@@ -13,4 +13,5 @@ public interface DepartamentoService {
 
     void eliminar(Long id);
     
+    void activar(Long id);
 }
